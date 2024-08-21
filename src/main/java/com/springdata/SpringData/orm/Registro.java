@@ -2,15 +2,9 @@ package com.springdata.SpringData.orm;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "registro")
@@ -25,9 +19,15 @@ public class Registro {
 	private String descricao;
 
 	@ManyToOne
-	@JoinColumn(name = "usuario_id", nullable = false)
+	@JoinColumn(name = "usuario_id", nullable = true)
 	private Usuario usuario;
 
+	@ManyToMany
+	@JoinTable(name = "registro_acoes",
+			joinColumns = @JoinColumn(name = "registro_fk"),
+			inverseJoinColumns = @JoinColumn(name = "acoes_fk")
+	)
+	List<Acoes> acoes;
 	@Deprecated
 	public Registro() {}
 

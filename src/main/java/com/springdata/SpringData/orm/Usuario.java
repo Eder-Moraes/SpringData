@@ -19,7 +19,7 @@ public class Usuario {
 
 	//fetching(busca) de maneira lazy(preguiçosa) por padrão, ele não traz os dados
 	//Você deve colocar eager(ansioso) para buscar todos esses dados, no caso, registros, mas sempre buscara esse dados
-	@OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY) //cascade = CascadeType.ALL - para apagar todos os registros caso o professor seja deletado
 	private List<Registro> registros;
 
 	@Deprecated // só para indicar que nós não usuremos muito, ou que ela será usada por outras bibliotecas externas
@@ -83,6 +83,11 @@ public class Usuario {
 				+ ", senha=" + senha + "]";
 	}
 
-
-
+	@PreRemove
+	public void atualizaRegistroOnDelete() {
+		System.out.println("=========atualiza registros on delete=========");
+		for (Registro registro : this.getRegistros()) {
+			registro.setUsuario(null);
+		}
+	}
 }
